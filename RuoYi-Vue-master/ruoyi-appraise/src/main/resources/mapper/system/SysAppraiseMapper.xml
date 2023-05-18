@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysAppraiseMapper">
+    
+    <resultMap type="SysAppraise" id="SysAppraiseResult">
+        <result property="id"    column="id"    />
+        <result property="stuid"    column="stuid"    />
+        <result property="name"    column="name"    />
+        <result property="classroom"    column="classroom"    />
+        <result property="applicationType"    column="application_type"    />
+        <result property="certificate"    column="certificate"    />
+        <result property="applicationForm"    column="application_form"    />
+        <result property="date"    column="date"    />
+        <result property="review"    column="review"    />
+    </resultMap>
+
+    <sql id="selectSysAppraiseVo">
+        select id, stuid, name, classroom, application_type, certificate, application_form, date, review from sys_appraise
+    </sql>
+
+    <select id="selectSysAppraiseList" parameterType="SysAppraise" resultMap="SysAppraiseResult">
+        <include refid="selectSysAppraiseVo"/>
+        <where>  
+            <if test="stuid != null "> and stuid = #{stuid}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="classroom != null  and classroom != ''"> and classroom = #{classroom}</if>
+            <if test="applicationType != null  and applicationType != ''"> and application_type = #{applicationType}</if>
+            <if test="certificate != null  and certificate != ''"> and certificate = #{certificate}</if>
+            <if test="applicationForm != null  and applicationForm != ''"> and application_form = #{applicationForm}</if>
+            <if test="date != null "> and date = #{date}</if>
+            <if test="review != null  and review != ''"> and review = #{review}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysAppraiseById" parameterType="Long" resultMap="SysAppraiseResult">
+        <include refid="selectSysAppraiseVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSysAppraise" parameterType="SysAppraise" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_appraise
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stuid != null">stuid,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="classroom != null and classroom != ''">classroom,</if>
+            <if test="applicationType != null and applicationType != ''">application_type,</if>
+            <if test="certificate != null and certificate != ''">certificate,</if>
+            <if test="applicationForm != null and applicationForm != ''">application_form,</if>
+            <if test="date != null">date,</if>
+            <if test="review != null and review != ''">review,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stuid != null">#{stuid},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="classroom != null and classroom != ''">#{classroom},</if>
+            <if test="applicationType != null and applicationType != ''">#{applicationType},</if>
+            <if test="certificate != null and certificate != ''">#{certificate},</if>
+            <if test="applicationForm != null and applicationForm != ''">#{applicationForm},</if>
+            <if test="date != null">#{date},</if>
+            <if test="review != null and review != ''">#{review},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysAppraise" parameterType="SysAppraise">
+        update sys_appraise
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="stuid != null">stuid = #{stuid},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="classroom != null and classroom != ''">classroom = #{classroom},</if>
+            <if test="applicationType != null and applicationType != ''">application_type = #{applicationType},</if>
+            <if test="certificate != null and certificate != ''">certificate = #{certificate},</if>
+            <if test="applicationForm != null and applicationForm != ''">application_form = #{applicationForm},</if>
+            <if test="date != null">date = #{date},</if>
+            <if test="review != null and review != ''">review = #{review},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysAppraiseById" parameterType="Long">
+        delete from sys_appraise where id = #{id}
+    </delete>
+
+    <delete id="deleteSysAppraiseByIds" parameterType="String">
+        delete from sys_appraise where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SrReviewMapper">
+    <resultMap type="SrReview" id="SrReviewResult">
+        <result property="id"    column="id"    />
+        <result property="stuid"    column="stuid"    />
+        <result property="name"    column="name"    />
+        <result property="academy"    column="academy"    />
+        <result property="classroom"    column="classroom"    />
+        <result property="applicationType"    column="application_type"    />
+        <result property="applicationForm"    column="application_form"    />
+        <result property="date"    column="date"    />
+        <result property="review"    column="review"    />
+    </resultMap>
+
+    <sql id="selectSrReviewVo">
+        select id, stuid, name, academy, classroom, application_type, application_form, date, review from sr_review
+    </sql>
+
+    <select id="selectSrReviewList" parameterType="SrReview" resultMap="SrReviewResult">
+        <include refid="selectSrReviewVo"/>
+        <where>
+            <if test="stuid != null "> and stuid = #{stuid}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="academy != null  and academy != ''"> and academy = #{academy}</if>
+            <if test="classroom != null  and classroom != ''"> and classroom = #{classroom}</if>
+            <if test="applicationType != null  and applicationType != ''"> and application_type = #{applicationType}</if>
+            <if test="applicationForm != null  and applicationForm != ''"> and application_form = #{applicationForm}</if>
+            <if test="date != null "> and date = #{date}</if>
+            <if test="review != null  and review != ''"> and review = #{review}</if>
+        </where>
+    </select>
+
+    <select id="selectSrReviewById" parameterType="Long" resultMap="SrReviewResult">
+        <include refid="selectSrReviewVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSrReview" parameterType="SrReview" useGeneratedKeys="true" keyProperty="id">
+        insert into sr_review
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stuid != null">stuid,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="academy != null and academy != ''">academy,</if>
+            <if test="classroom != null and classroom != ''">classroom,</if>
+            <if test="applicationType != null and applicationType != ''">application_type,</if>
+            <if test="applicationForm != null and applicationForm != ''">application_form,</if>
+            <if test="date != null">date,</if>
+            <if test="review != null">review,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stuid != null">#{stuid},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="academy != null and academy != ''">#{academy},</if>
+            <if test="classroom != null and classroom != ''">#{classroom},</if>
+            <if test="applicationType != null and applicationType != ''">#{applicationType},</if>
+            <if test="applicationForm != null and applicationForm != ''">#{applicationForm},</if>
+            <if test="date != null">#{date},</if>
+            <if test="review != null">#{review},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSrReview" parameterType="SrReview">
+        update sr_review
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="stuid != null">stuid = #{stuid},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="academy != null and academy != ''">academy = #{academy},</if>
+            <if test="classroom != null and classroom != ''">classroom = #{classroom},</if>
+            <if test="applicationType != null and applicationType != ''">application_type = #{applicationType},</if>
+            <if test="applicationForm != null and applicationForm != ''">application_form = #{applicationForm},</if>
+            <if test="date != null">date = #{date},</if>
+            <if test="review != null">review = #{review},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSrReviewById" parameterType="Long">
+        delete from sr_review where id = #{id}
+    </delete>
+
+    <delete id="deleteSrReviewByIds" parameterType="String">
+        delete from sr_review where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

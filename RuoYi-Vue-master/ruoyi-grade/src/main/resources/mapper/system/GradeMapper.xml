@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.GradeMapper">
+    
+    <resultMap type="Grade" id="GradeResult">
+        <result property="id"    column="id"    />
+        <result property="stuid"    column="stuid"    />
+        <result property="姓名"    column="姓名"    />
+        <result property="科目"    column="科目"    />
+        <result property="成绩"    column="成绩"    />
+        <result property="结果"    column="结果"    />
+    </resultMap>
+
+    <sql id="selectGradeVo">
+        select id, stuid, 姓名, 科目, 成绩, 结果 from grade
+    </sql>
+
+    <select id="selectGradeList" parameterType="Grade" resultMap="GradeResult">
+        <include refid="selectGradeVo"/>
+        <where>  
+            <if test="stuid != null "> and stuid = #{stuid}</if>
+            <if test="姓名 != null  and 姓名 != ''"> and 姓名 = #{姓名}</if>
+            <if test="科目 != null  and 科目 != ''"> and 科目 = #{科目}</if>
+            <if test="成绩 != null  and 成绩 != ''"> and 成绩 = #{成绩}</if>
+            <if test="结果 != null  and 结果 != ''"> and 结果 = #{结果}</if>
+        </where>
+    </select>
+    
+    <select id="selectGradeById" parameterType="Long" resultMap="GradeResult">
+        <include refid="selectGradeVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertGrade" parameterType="Grade" useGeneratedKeys="true" keyProperty="id">
+        insert into grade
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stuid != null">stuid,</if>
+            <if test="姓名 != null and 姓名 != ''">姓名,</if>
+            <if test="科目 != null and 科目 != ''">科目,</if>
+            <if test="成绩 != null and 成绩 != ''">成绩,</if>
+            <if test="结果 != null and 结果 != ''">结果,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stuid != null">#{stuid},</if>
+            <if test="姓名 != null and 姓名 != ''">#{姓名},</if>
+            <if test="科目 != null and 科目 != ''">#{科目},</if>
+            <if test="成绩 != null and 成绩 != ''">#{成绩},</if>
+            <if test="结果 != null and 结果 != ''">#{结果},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGrade" parameterType="Grade">
+        update grade
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="stuid != null">stuid = #{stuid},</if>
+            <if test="姓名 != null and 姓名 != ''">姓名 = #{姓名},</if>
+            <if test="科目 != null and 科目 != ''">科目 = #{科目},</if>
+            <if test="成绩 != null and 成绩 != ''">成绩 = #{成绩},</if>
+            <if test="结果 != null and 结果 != ''">结果 = #{结果},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGradeById" parameterType="Long">
+        delete from grade where id = #{id}
+    </delete>
+
+    <delete id="deleteGradeByIds" parameterType="String">
+        delete from grade where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
